@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ì°¨ëì ë³´ì¡°í API íì¤í¸ â ê¸°ìì ë³´íµì </title>
+  <title>차량정보조회 API 테스트 — 기웅정보통신</title>
   <style>
     :root {
       --primary: #1a56db;
@@ -293,104 +293,103 @@
 <body>
 
 <header>
-  <span class="logo">ð ì°¨ëì ë³´ì¡°í API</span>
-  <span class="badge">ë´ë¶ ê²°ê³¼ ëêµ¬</span>
+  <span class="logo">🚗 차량정보조회 API</span>
+  <span class="badge">내부 테스트 도구</span>
 </header>
 
 <div class="container">
 
-  <!-- â  íê²½ ì í -->
+  <!-- ① 환경 선택 -->
   <div class="card">
-    <div class="card-title">ð§ íê²½ ì¤ì </div>
+    <div class="card-title">🔧 환경 설정</div>
     <div class="form-group">
-      <label>ìë² íê²½</label>
+      <label>서버 환경</label>
       <div class="env-toggle">
-        <button class="env-btn active" onclick="setEnv('dev', this)">ê°ë°ê³ (Dev)</button>
-        <button class="env-btn" onclick="setEnv('prod', this)">ì´ìê³ (Prod)</button>
+        <button class="env-btn active" onclick="setEnv('dev', this)">개발계 (Dev)</button>
+        <button class="env-btn" onclick="setEnv('prod', this)">운영계 (Prod)</button>
       </div>
-      <div class="env-url" id="envUrl">/api/proxy?env=dev â datahub-dev.scraping.co.kr</div>
+      <div class="env-url" id="envUrl">/api/proxy?env=dev → datahub-dev.scraping.co.kr</div>
     </div>
   </div>
 
-  <!-- â¡ ì¡°í ìë ¥ -->
+  <!-- ② 조회 입력 -->
   <div class="card">
-    <div class="card-title">ð ì¡°í ì ë³´ ìë ¥</div>
+    <div class="card-title">🔍 조회 정보 입력</div>
 
     <div class="form-group">
-      <label>ìëì°¨ë±ë¡ë²í¸ <span class="required">*</span><span class="hint">ì: 23ì¬5678</span></label>
-      <input type="text" id="reginumber" placeholder="ì: 23ì¬5678" />
+      <label>자동차등록번호 <span class="required">*</span><span class="hint">예: 23사5678</span></label>
+      <input type="text" id="reginumber" placeholder="예: 23사5678" />
     </div>
 
     <div class="form-group">
-      <label>ìì ìëª <span class="required">*</span><span class="hint">ì: íê¸¸ë</span></label>
-      <input type="text" id="ownername" placeholder="ì: íê¸¸ë" />
+      <label>소유자명 <span class="required">*</span><span class="hint">예: 홍길동</span></label>
+      <input type="text" id="ownername" placeholder="예: 홍길동" />
     </div>
 
     <button class="submit-btn" id="submitBtn" onclick="callApi()">
       <span class="spinner" id="spinner"></span>
-      <span id="btnText">ì¡°ííê¸°</span>
+      <span id="btnText">조회하기</span>
     </button>
   </div>
 
-  <!-- â¢ ê²°ê³¼ -->
+  <!-- ③ 결과 -->
   <div id="result" class="card">
     <div class="result-header">
       <div class="result-status">
         <span class="status-dot" id="statusDot"></span>
         <span class="status-text" id="statusText"></span>
       </div>
-      <button class="json-toggle" id="jsonToggleBtn" onclick="toggleJson()">JSON ë³´ê¸°</button>
+      <button class="json-toggle" id="jsonToggleBtn" onclick="toggleJson()">JSON 보기</button>
     </div>
 
-    <!-- ì±ê³µ -->
+    <!-- 성공 -->
     <div id="successView">
       <div class="car-card">
         <div class="car-card-top">
           <div class="car-img-wrap">
-            <img id="carImg" src="" alt="" style="display:none" onerror="this.style.display='none'; document.getElementById('carImgFallback').style.display='block';" />
-            <span id="carImgFallback" class="no-img">ð</span>
+            <img id="carImg" src="" alt="" onerror="this.parentElement.innerHTML='<span class=no-img>🚗</span>'" />
           </div>
           <div class="car-name-group">
-            <h2 id="carName">â</h2>
-            <div class="sub" id="carSubModel">â</div>
+            <h2 id="carName">—</h2>
+            <div class="sub" id="carSubModel">—</div>
             <div class="tags">
-              <span class="tag" id="carYear">â</span>
-              <span class="tag" id="carFuel">â</span>
-              <span class="tag" id="carMission">â</span>
+              <span class="tag" id="carYear">—</span>
+              <span class="tag" id="carFuel">—</span>
+              <span class="tag" id="carMission">—</span>
             </div>
           </div>
         </div>
 
         <div class="info-grid">
-          <div class="info-cell"><div class="label">ì ì¡°ì¬</div><div class="value" id="carVender">â</div></div>
-          <div class="info-cell"><div class="label">êµ¬ëë°©ì</div><div class="value" id="carDrive">â</div></div>
-          <div class="info-cell"><div class="label">ë°°ê¸°ë</div><div class="value" id="carCC">â</div></div>
-          <div class="info-cell"><div class="label">ì ì°¨ê°ê²©</div><div class="value" id="carPrice">â</div></div>
-          <div class="info-cell"><div class="label">ì°ë¹</div><div class="value" id="carFuelEco">â</div></div>
-          <div class="info-cell"><div class="label">ì°ë£í±í¬</div><div class="value" id="carFuelTank">â</div></div>
-          <div class="info-cell"><div class="label">ìíì´ì´</div><div class="value" id="carFrontTire">â</div></div>
-          <div class="info-cell"><div class="label">ë·íì´ì´</div><div class="value" id="carRearTire">â</div></div>
-          <div class="info-cell"><div class="label">ì¢ìì</div><div class="value" id="carSeats">â</div></div>
-          <div class="info-cell"><div class="label">ìì´í¼</div><div class="value" id="carWiper">â</div></div>
-          <div class="info-cell"><div class="label">ìì§ì¤ì¼</div><div class="value" id="carOilLiter">â</div></div>
-          <div class="info-cell"><div class="label">ì°¨ëë²í¸</div><div class="value" id="carVin" style="font-size:12px">â</div></div>
+          <div class="info-cell"><div class="label">제조사</div><div class="value" id="carVender">—</div></div>
+          <div class="info-cell"><div class="label">구동방식</div><div class="value" id="carDrive">—</div></div>
+          <div class="info-cell"><div class="label">배기량</div><div class="value" id="carCC">—</div></div>
+          <div class="info-cell"><div class="label">신차가격</div><div class="value" id="carPrice">—</div></div>
+          <div class="info-cell"><div class="label">연비</div><div class="value" id="carFuelEco">—</div></div>
+          <div class="info-cell"><div class="label">연료탱크</div><div class="value" id="carFuelTank">—</div></div>
+          <div class="info-cell"><div class="label">앞타이어</div><div class="value" id="carFrontTire">—</div></div>
+          <div class="info-cell"><div class="label">뒷타이어</div><div class="value" id="carRearTire">—</div></div>
+          <div class="info-cell"><div class="label">좌석수</div><div class="value" id="carSeats">—</div></div>
+          <div class="info-cell"><div class="label">와이퍼</div><div class="value" id="carWiper">—</div></div>
+          <div class="info-cell"><div class="label">엔진오일</div><div class="value" id="carOilLiter">—</div></div>
+          <div class="info-cell"><div class="label">차대번호</div><div class="value" id="carVin" style="font-size:12px">—</div></div>
         </div>
 
-        <div class="section-label">ð ë°°í°ë¦¬ ì ë³´</div>
+        <div class="section-label">🔋 배터리 정보</div>
         <table class="battery-table">
-          <thead><tr><th>ì ì¡°ì¬</th><th>ëª¨ë¸</th><th>ì¢ë¥</th></tr></thead>
+          <thead><tr><th>제조사</th><th>모델</th><th>종류</th></tr></thead>
           <tbody id="batteryBody"></tbody>
         </table>
       </div>
     </div>
 
-    <!-- ì¤í¨ -->
+    <!-- 실패 -->
     <div id="errorView" style="display:none">
       <div class="error-box">
-        <span class="error-icon">â</span>
+        <span class="error-icon">❌</span>
         <div>
-          <div class="error-title" id="errorTitle">ì¡°í ì¤í¨</div>
-          <div class="error-msg" id="errorMsg">â</div>
+          <div class="error-title" id="errorTitle">조회 실패</div>
+          <div class="error-msg" id="errorMsg">—</div>
         </div>
       </div>
     </div>
@@ -401,13 +400,13 @@
     </div>
   </div>
 
-  <footer>ê¸°ìì ë³´íµì  ìë£¨ìì¬ìí Â· ë´ë¶ ì ì© íì¤í¸ ëêµ¬ Â· dataapi.co.kr</footer>
+  <footer>기웅정보통신 솔루션사업팀 · 내부 전용 테스트 도구 · dataapi.co.kr</footer>
 </div>
 
 <script>
   const ENV_LABELS = {
-    dev:  '/api/proxy?env=dev â datahub-dev.scraping.co.kr',
-    prod: '/api/proxy?env=prod â api.mydatahub.co.kr'
+    dev:  '/api/proxy?env=dev → datahub-dev.scraping.co.kr',
+    prod: '/api/proxy?env=prod → api.mydatahub.co.kr'
   };
   let currentEnv = 'dev';
   let showJson = false;
@@ -422,36 +421,30 @@
   function toggleJson() {
     showJson = !showJson;
     document.getElementById('jsonView').classList.toggle('visible', showJson);
-    document.getElementById('jsonToggleBtn').textContent = showJson ? 'JSON ë«ê¸°' : 'JSON ë³´ê¸°';
+    document.getElementById('jsonToggleBtn').textContent = showJson ? 'JSON 닫기' : 'JSON 보기';
   }
 
   function v(val, suffix) {
-    return (!val || val === '') ? 'â' : (suffix ? val + suffix : val);
+    return (!val || val === '') ? '—' : (suffix ? val + suffix : val);
   }
 
   function renderSuccess(d) {
-    // ë§¤ ì¡°íë§ë¤ ì´ë¯¸ì§ ìì­ ì´ê¸°í
-    const img = document.getElementById('carImg');
-    const fallback = document.getElementById('carImgFallback');
-    if (img) { img.src = ''; img.style.display = 'none'; }
-    if (fallback) fallback.style.display = 'block';
-
-    document.getElementById('carName').textContent    = ((d.CARVENDER || '') + ' ' + (d.CARNAME || '')).trim() || 'â';
+    document.getElementById('carName').textContent    = ((d.CARVENDER || '') + ' ' + (d.CARNAME || '')).trim() || '—';
     document.getElementById('carSubModel').textContent = v(d.SUBMODEL);
-    document.getElementById('carYear').textContent    = v(d.CARYEAR) + 'ëì';
+    document.getElementById('carYear').textContent    = v(d.CARYEAR) + '년식';
     document.getElementById('carFuel').textContent    = v(d.FUEL);
     document.getElementById('carMission').textContent = v(d.MISSION);
     document.getElementById('carVender').textContent  = v(d.CARVENDER);
     document.getElementById('carDrive').textContent   = v(d.DRIVE);
-    document.getElementById('carCC').textContent      = d.CC ? d.CC + ' cc' : 'â';
-    document.getElementById('carPrice').textContent   = d.PRICE ? Number(d.PRICE).toLocaleString() + ' ì' : 'â';
-    document.getElementById('carFuelEco').textContent = d.FUELECO ? d.FUELECO + ' km/L' : 'â';
-    document.getElementById('carFuelTank').textContent= d.FUELTANK ? d.FUELTANK + ' L' : 'â';
+    document.getElementById('carCC').textContent      = d.CC ? d.CC + ' cc' : '—';
+    document.getElementById('carPrice').textContent   = d.PRICE ? Number(d.PRICE).toLocaleString() + ' 원' : '—';
+    document.getElementById('carFuelEco').textContent = d.FUELECO ? d.FUELECO + ' km/L' : '—';
+    document.getElementById('carFuelTank').textContent= d.FUELTANK ? d.FUELTANK + ' L' : '—';
     document.getElementById('carFrontTire').textContent = v(d.FRONTTIRE);
     document.getElementById('carRearTire').textContent  = v(d.REARTIRE);
-    document.getElementById('carSeats').textContent   = d.SEATS ? d.SEATS + ' ì' : 'â';
+    document.getElementById('carSeats').textContent   = d.SEATS ? d.SEATS + ' 석' : '—';
     document.getElementById('carWiper').textContent   = v(d.WIPER);
-    document.getElementById('carOilLiter').textContent= d.EOILLITER ? d.EOILLITER + ' L' : 'â';
+    document.getElementById('carOilLiter').textContent= d.EOILLITER ? d.EOILLITER + ' L' : '—';
     document.getElementById('carVin').textContent     = v(d.VIN);
     if (d.CARURL) {
       const imgEl = document.getElementById('carImg');
@@ -468,19 +461,19 @@
     if (d.BATTERYLIST && d.BATTERYLIST.length > 0) {
       d.BATTERYLIST.forEach(b => {
         const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${b.BRAND||'â'}</td><td>${b.MODEL||'â'}</td><td>${b.TYPE||'â'}</td>`;
+        tr.innerHTML = `<td>${b.BRAND||'—'}</td><td>${b.MODEL||'—'}</td><td>${b.TYPE||'—'}</td>`;
         tb.appendChild(tr);
       });
     } else {
-      tb.innerHTML = '<tr><td colspan="3" style="color:#94a3b8;text-align:center;padding:14px">ë°°í°ë¦¬ ì ë³´ ìì</td></tr>';
+      tb.innerHTML = '<tr><td colspan="3" style="color:#94a3b8;text-align:center;padding:14px">배터리 정보 없음</td></tr>';
     }
     document.getElementById('successView').style.display = 'block';
     document.getElementById('errorView').style.display   = 'none';
   }
 
   function renderError(code, msg) {
-    document.getElementById('errorTitle').textContent = 'ì¡°í ì¤í¨' + (code ? ` (errCode: ${code})` : '');
-    document.getElementById('errorMsg').textContent   = msg || 'ì ì ìë ì¤ë¥ê° ë°ìíìµëë¤.';
+    document.getElementById('errorTitle').textContent = '조회 실패' + (code ? ` (errCode: ${code})` : '');
+    document.getElementById('errorMsg').textContent   = msg || '알 수 없는 오류가 발생했습니다.';
     document.getElementById('successView').style.display = 'none';
     document.getElementById('errorView').style.display   = 'block';
   }
@@ -488,13 +481,13 @@
   async function callApi() {
     const regno = document.getElementById('reginumber').value.trim();
     const owner = document.getElementById('ownername').value.trim();
-    if (!regno) return alert('ìëì°¨ë±ë¡ë²í¸ë¥¼ ìë ¥í´ì£¼ì¸ì.');
-    if (!owner) return alert('ìì ìëªì ìë ¥í´ì£¼ì¸ì.');
+    if (!regno) return alert('자동차등록번호를 입력해주세요.');
+    if (!owner) return alert('소유자명을 입력해주세요.');
 
     const btn = document.getElementById('submitBtn');
     btn.disabled = true;
     document.getElementById('spinner').style.display = 'block';
-    document.getElementById('btnText').textContent   = 'ì¡°í ì¤...';
+    document.getElementById('btnText').textContent   = '조회 중...';
     document.getElementById('result').style.display  = 'none';
 
     try {
@@ -514,24 +507,19 @@
 
       if (json.result === 'SUCCESS' && json.data && json.data.RESPONSE === 'true') {
         dot.className = 'status-dot success';
-        text.textContent = 'â ì¡°í ì±ê³µ';
+        text.textContent = '✅ 조회 성공';
         renderSuccess(json.data);
       } else {
         dot.className = 'status-dot error';
-        text.textContent = 'â ì¡°í ì¤í¨';
+        text.textContent = '❌ 조회 실패';
         renderError(json.errCode, json.errMsg);
       }
     } catch (err) {
-      if (err.name === 'TypeError' && err.message.includes('fetch')) {
-        alert('ë¤í¸ìí¬ ì¤ë¥: ' + err.message);
-      } else {
-        console.error('ë ëë§ ì¤ë¥:', err);
-        // ê²°ê³¼ ì¹´ëê° ì´ë¯¸ íìëë¤ë©´ ê·¸ëë¡ ì ì§ (JSON ë³´ê¸°ë¡ íì¸ ê°ë¥)
-      }
+      alert('네트워크 오류: ' + err.message);
     } finally {
       btn.disabled = false;
       document.getElementById('spinner').style.display = 'none';
-      document.getElementById('btnText').textContent   = 'ì¡°ííê¸°';
+      document.getElementById('btnText').textContent   = '조회하기';
     }
   }
 
