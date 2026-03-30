@@ -1,0 +1,6 @@
+{
+  "name": "car-api-tester",
+  "version": "1.0.0",
+  "description": "기웅정보통신 차량정보조회 API 테스트 도구",
+  "private": true
+}
