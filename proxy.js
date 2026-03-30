@@ -6,7 +6,7 @@ const URLS = {
   prod: 'https://api.mydatahub.co.kr/assist/common/carzen/CarAllInfoInquiry'
 };
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   // ── CORS 헤더 설정 (모든 도메인 허용) ──
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
